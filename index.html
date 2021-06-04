@@ -21,18 +21,15 @@
 
   <script>
     const img = document.querySelector('img');
-    function getGif(url) {
-      return fetch(url)
-        .then(function (response) {
-          return response.json()
-        })
-        .then(function (response) {
-          img.src = response.data.images.original.url;
-        })
-        .catch((err) => {
-          img.src = 'https://media1.giphy.com/media/YyKPbc5OOTSQE/giphy.gif?cid=edb9906efb2c8ed0781281df7888c3661127cd3791602595&amp;rid=giphy.gif&amp;ct=g&amp;cid=edb9906efb2c8ed0781281df7888c3661127cd3791602595&amp;rid=giphy.gif&amp;ct=g'
-          console.log('error', err)
-        })
+    async function getGif(url) {
+      try {
+        const response = await fetch(url);
+        const gifData = await response.json();
+        img.src = gifData.data.images.original.url;
+      } catch (err) {
+        img.src = 'https://media1.giphy.com/media/YyKPbc5OOTSQE/giphy.gif?cid=edb9906efb2c8ed0781281df7888c3661127cd3791602595&amp;rid=giphy.gif&amp;ct=g&amp;cid=edb9906efb2c8ed0781281df7888c3661127cd3791602595&amp;rid=giphy.gif&amp;ct=g'
+        console.log('error:', err);
+      }
     }
 
     getGif('https://api.giphy.com/v1/gifs/translate?api_key=ujAIuDsXHylYtS2PSarXBUVTQSF7y3Si&s=cats')
@@ -48,6 +45,7 @@
 
     const searchInput = document.getElementById('search-input');
     const searchBtn = document.getElementById('search-btn');
+
     searchBtn.addEventListener('click', () => {
       getGif(`https://api.giphy.com/v1/gifs/translate?api_key=ujAIuDsXHylYtS2PSarXBUVTQSF7y3Si&s=${searchInput.value}`)
     })
